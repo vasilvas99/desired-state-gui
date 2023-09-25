@@ -214,14 +214,6 @@ async def deploy_selected_definitions(desired_state_topic):
     ui.notify("Successfully published desired state!")
 
 
-async def deploy_selected():
-    if rows:
-        for row in rows:
-            ui.notify(f"{row['name']}, {row['age']}")
-    else:
-        ui.notify("No rows selected.")
-
-
 with ui.splitter().classes("w-full") as splitter:
     with splitter.before:
         ui.label("Available Container Definitions")
