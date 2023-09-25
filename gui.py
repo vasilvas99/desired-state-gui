@@ -146,7 +146,7 @@ def reset_connection_loop():
         ui.notify("Disconnected")
 
 
-def connect(uri, keepalive=60, referesh_rate_s=1):
+def connect(uri, keepalive=60, referesh_rate_s=0.3):
     global EVENT_LOOP_TIMER
     global MQTT_CLIENT
     uri = urlparse(uri)
