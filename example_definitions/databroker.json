@@ -1,0 +1,79 @@
+{
+  "activityId": "",
+  "payload": {
+    "domains": [
+      {
+        "id": "containers",
+        "config": [],
+        "components": [
+          {
+            "id": "databroker",
+            "version": "0.3.0",
+            "config": [
+              {
+                "key": "image",
+                "value": "ghcr.io/eclipse/kuksa.val/databroker:0.3.0"
+              },
+              {
+                "key": "env",
+                "value": "RUST_LOG=info"
+              },
+              {
+                "key": "env",
+                "value": "vehicle_data_broker=debug"
+              },
+              {
+                "key": "privileged",
+                "value": "false"
+              },
+              {
+                "key": "network",
+                "value": "bridge"
+              },
+              {
+                "key": "port",
+                "value": "localhost:55555:30555-30555/tcp"
+              },
+              {
+                "key": "restartPolicy",
+                "value": "unless-stopped"
+              },
+              {
+                "key": "restartMaxRetries",
+                "value": "0"
+              },
+              {
+                "key": "restartTimeout",
+                "value": "0"
+              },
+              {
+                "key": "logDriver",
+                "value": "json-file"
+              },
+              {
+                "key": "logMaxFiles",
+                "value": "2"
+              },
+              {
+                "key": "logMaxSize",
+                "value": "1M"
+              },
+              {
+                "key": "logMode",
+                "value": "blocking"
+              },
+              {
+                "key": "terminal",
+                "value": "false"
+              },
+              {
+                "key": "interactive",
+                "value": "false"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

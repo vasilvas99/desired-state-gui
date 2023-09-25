@@ -1,0 +1,95 @@
+{
+  "activityId": "",
+  "payload": {
+    "domains": [
+      {
+        "id": "containers",
+        "config": [],
+        "components": [
+          {
+            "id": "feedergps",
+            "version": "main",
+            "config": [
+              {
+                "key": "image",
+                "value": "ghcr.io/eclipse/kuksa.val.feeders/gps:main"
+              },
+              {
+                "key": "env",
+                "value": "GPSD_OPTIONS=-S 2948 gpsd://host:2947"
+              },
+              {
+                "key": "cmd",
+                "value": "--insecure=True"
+              },
+              {
+                "key": "cmd",
+                "value": "--ip databroker"
+              },
+              {
+                "key": "cmd",
+                "value": "--port 55555"
+              },
+              {
+                "key": "cmd",
+                "value": "--protocol grpc"
+              },
+              {
+                "key": "privileged",
+                "value": "false"
+              },
+              {
+                "key": "network",
+                "value": "bridge"
+              },
+              {
+                "key": "host",
+                "value": "databroker:container_databroker-host"
+              },
+              {
+                "key": "host",
+                "value": "host:host_ip"
+              },
+              {
+                "key": "restartPolicy",
+                "value": "unless-stopped"
+              },
+              {
+                "key": "restartMaxRetries",
+                "value": "0"
+              },
+              {
+                "key": "restartTimeout",
+                "value": "0"
+              },
+              {
+                "key": "logDriver",
+                "value": "json-file"
+              },
+              {
+                "key": "logMaxFiles",
+                "value": "2"
+              },
+              {
+                "key": "logMaxSize",
+                "value": "1M"
+              },
+              {
+                "key": "logMode",
+                "value": "blocking"
+              },
+              {
+                "key": "terminal",
+                "value": "false"
+              },
+              {
+                "key": "interactive",
+                "value": "false"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
