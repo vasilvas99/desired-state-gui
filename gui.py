@@ -248,8 +248,10 @@ with ui.row():
     )
 
 with ui.row():
-    url_text_field = ui.input("Connection Host")
-    mqtt_desired_state_topic_field = ui.input("Desired State Topic")
+    url_text_field = ui.input("Connection Host", value="mqtt://localhost")
+    mqtt_desired_state_topic_field = ui.input(
+        "Desired State Topic", value="vehicleupdate/desiredstate"
+    )
 
 with ui.row():
     ui.button("Connect", on_click=lambda: connect(url_text_field.value), icon="cloud")
