@@ -92,8 +92,9 @@ class Row:
         return [Row(idx, container) for idx, container in enumerate(containers)]
 
 
-def subscribe_to_updates(client, userdata, flags, rc):
+def subscribe_to_updates(desired_state_topic, client, userdata, flags, rc):
     client.subscribe(CUA_INVENTORY_TOPIC)
+    client.subscribe(f"{desired_state_topic}feedback")
 
 
 def extract_container_info(json_data):
@@ -119,12 +120,16 @@ def extract_container_info(json_data):
     return container_info
 
 
-def on_update_message(client, userdata, msg):
+def on_update_message(desired_state_topic, client, userdata, msg):
     if msg.topic == CUA_INVENTORY_TOPIC:
         current_state = msg.payload.decode("ascii")
         containers = extract_container_info(json.loads(current_state))
         rows_deployed = Row.from_containers_list(containers)
         DEPLOYED_CONTAINERS_GRID.call_api_method("setRowData", rows_deployed)
+    elif msg.topic == f"{desired_state_topic}feedback":
+        msg_data = json.loads(msg.payload.decode("ascii"))
+        status = msg_data["payload"]["status"]
+        STATE_TOGGLE.set_value(status)
 
 
 def main_update_loop(client: mqttc.Client):
@@ -146,13 +151,13 @@ def reset_connection_loop():
         ui.notify("Disconnected")
 
 
-def connect(uri, keepalive=60, referesh_rate_s=0.3):
+def connect(uri, desired_state_topic, keepalive=60, referesh_rate_s=0.3):
     global EVENT_LOOP_TIMER
     global MQTT_CLIENT
     uri = urlparse(uri)
     c = mqttc.Client()
-    c.on_connect = subscribe_to_updates
-    c.on_message = on_update_message
+    c.on_connect = lambda *args: subscribe_to_updates(desired_state_topic, *args)
+    c.on_message = lambda *args: on_update_message(desired_state_topic, *args)
     try:
         if uri.port is None:
             port = 1883
@@ -216,7 +221,7 @@ async def deploy_selected_definitions(desired_state_topic):
 
 with ui.splitter().classes("w-full") as splitter:
     with splitter.before:
-        ui.label("Available Container Definitions")
+        ui.label("Desired State")
         AVAILABLE_DEFINITIONS_GRID = ui.aggrid(
             {
                 "columnDefs": AVAILABLE_TABLE_COLUMNS,
@@ -225,7 +230,7 @@ with ui.splitter().classes("w-full") as splitter:
             }
         )
     with splitter.after:
-        ui.label("Deployed Containers")
+        ui.label("Current State")
         DEPLOYED_CONTAINERS_GRID = ui.aggrid(
             {
                 "columnDefs": DEPLOYED_TABLE_COLUMNS,
@@ -246,6 +251,17 @@ with ui.row():
         ),
         icon="send",
     )
+    STATE_TOGGLE = ui.toggle(
+        {
+            "IDENTIFYING": "IDENTIFYING",
+            "IDENTIFIED": "IDENTIFIED",
+            "RUNNING": "RUNNING",
+            "INCOMPLETE": "INCOMPLETE",
+            "COMPLETED": "COMPLETED",
+            "SUPERSEDED": "SUPERSEDED",
+        }
+    )
+    STATE_TOGGLE.disable()
 
 with ui.row():
     url_text_field = ui.input("Connection Host", value="mqtt://localhost")
@@ -254,6 +270,14 @@ with ui.row():
     )
 
 with ui.row():
-    ui.button("Connect", on_click=lambda: connect(url_text_field.value), icon="cloud")
+    ui.button(
+        "Connect",
+        on_click=lambda: connect(
+            url_text_field.value, mqtt_desired_state_topic_field.value
+        ),
+        icon="cloud",
+    )
     ui.button("Disconnect", on_click=reset_connection_loop, icon="cloud_off")
-ui.run(title="Deploy Desired State", reload=False)
+
+
+ui.run(title="Deploy Desired State")
