@@ -1,0 +1,28 @@
+{
+  "activityId": "",
+  "payload": {
+    "domains": [
+      {
+        "id": "containers",
+        "config": [],
+        "components": [
+          {
+            "id": "containers:hello-world",
+            "version": "latest",
+            "type": "CONTAINER",
+            "parameters": [
+              {
+                "key": "image",
+                "value": "docker.io/library/hello-world:latest"
+              },
+              {
+                "key": "status",
+                "value": "Running"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
