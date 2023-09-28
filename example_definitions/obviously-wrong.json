@@ -1,0 +1,28 @@
+{
+    "activityId": "",
+    "payload": {
+      "domains": [
+        {
+          "id": "containers",
+          "config": [],
+          "components": [
+            {
+              "id": "obviously-wrong",
+              "version": "latest",
+              "type": "CONTAINER",
+              "config": [
+                {
+                  "key": "image",
+                  "value": "NOT-A-REAL-IMAGE"
+                },
+                {
+                  "key": "status",
+                  "value": "Running"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }

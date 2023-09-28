@@ -7,10 +7,10 @@
         "config": [],
         "components": [
           {
-            "id": "containers:hello-world",
+            "id": "hello-world",
             "version": "latest",
             "type": "CONTAINER",
-            "parameters": [
+            "config": [
               {
                 "key": "image",
                 "value": "docker.io/library/hello-world:latest"
